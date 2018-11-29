@@ -59,7 +59,8 @@ class dnn(dict):
     def add_layer(self,layer_type,layer_name,**kwargs):
         """Adds a layer to the class instance
         Args:
-            layer_type: Type of layer ('Convolution','Fully_connected' or 'Max_pool')
+            layer_type: Type of layer ('Convolution', 'Fully_connected' or
+                    'Max_pool')
             layer_name: Name of layer (string)
         Layer type specific args:
             Convolution:
@@ -77,6 +78,7 @@ class dnn(dict):
         """
 
         num_layers = len(self['layers'])
+        new_layer = num_layers+1
         if num_layers==0:
             input_dimension = self['input']['dimension']
             input_size = self['input']['size']
@@ -85,37 +87,41 @@ class dnn(dict):
             input_size = self['layers'][num_layers]['output_size']
 
 
-        self['layers'][num_layers+1] = {}     # Create new layer
-        self['layers'][num_layers+1]['name'] = layer_name
-        self['layers'][num_layers+1]['type'] = layer_type
+        self['layers'][new_layer] = {}     # Create new layer
+        self['layers'][new_layer]['name'] = layer_name
+        self['layers'][new_layer]['type'] = layer_type
 
         if layer_type.lower()=='convolution':
-            padding_reduction = ((kwargs['padding'].lower()=='valid')*(kwargs['kernelsize']-1))
+            padding_reduction = (
+                    (kwargs['padding'].lower()=='valid')
+                    *(kwargs['kernelsize']-1))
             output_size = ((input_size - padding_reduction)/kwargs['strides'])
 
-            self['layers'][num_layers+1]['matsize'] = input_size
-            self['layers'][num_layers+1]['kernelsize'] = kwargs['kernelsize']
-            self['layers'][num_layers+1]['channels_in'] = input_dimension
-            self['layers'][num_layers+1]['channels_out'] = kwargs['channels_out']
-            self['layers'][num_layers+1]['padding'] = kwargs['padding']
-            self['layers'][num_layers+1]['strides'] = kwargs['strides']
-            self['layers'][num_layers+1]['use_bias'] = kwargs['use_bias']
-            self['layers'][num_layers+1]['activation'] = kwargs['activation']
-            self['layers'][num_layers+1]['output_size'] = output_size
+            self['layers'][new_layer]['matsize'] = input_size
+            self['layers'][new_layer]['kernelsize'] = kwargs['kernelsize']
+            self['layers'][new_layer]['channels_in'] = input_dimension
+            self['layers'][new_layer]['channels_out'] = kwargs['channels_out']
+            self['layers'][new_layer]['padding'] = kwargs['padding']
+            self['layers'][new_layer]['strides'] = kwargs['strides']
+            self['layers'][new_layer]['use_bias'] = kwargs['use_bias']
+            self['layers'][new_layer]['activation'] = kwargs['activation']
+            self['layers'][new_layer]['output_size'] = output_size
 
         if layer_type.lower()=='max_pool':
-            padding_reduction = ((kwargs['padding'].lower()=='valid')*(kwargs['pool_size']-1))
+            padding_reduction = (
+                    (kwargs['padding'].lower()=='valid')
+                    *(kwargs['pool_size']-1))
             output_size = ((input_size - padding_reduction)/kwargs['strides'])
 
-            self['layers'][num_layers+1]['pool_size'] = kwargs['pool_size']
-            self['layers'][num_layers+1]['strides'] = kwargs['strides']
-            self['layers'][num_layers+1]['padding'] = kwargs['padding']
-            self['layers'][num_layers+1]['output_size'] = output_size
-            self['layers'][num_layers+1]['channels_out'] = input_dimension
+            self['layers'][new_layer]['pool_size'] = kwargs['pool_size']
+            self['layers'][new_layer]['strides'] = kwargs['strides']
+            self['layers'][new_layer]['padding'] = kwargs['padding']
+            self['layers'][new_layer]['output_size'] = output_size
+            self['layers'][new_layer]['channels_out'] = input_dimension
 
         print('%s (%s), now %dx%d with %d channels'
               %(layer_name, layer_type, output_size, output_size,
-                self['layers'][num_layers+1]['channels_out']))
+                self['layers'][new_layer]['channels_out']))
 
 
     def remove_last_layer(self):
@@ -146,9 +152,11 @@ class dnn(dict):
         """
 
         if model_file=='':
-            model_file = pkg_resources.resource_filename('mlpredict', 'model/model_all')
+            model_file = pkg_resources.resource_filename(
+                    'mlpredict', 'model/model_all')
         if scaler_file=='':
-            scaler_file = pkg_resources.resource_filename('mlpredict', 'model/scaler_Conv_all.save')
+            scaler_file = pkg_resources.resource_filename(
+                    'mlpredict', 'model/scaler_Conv_all.save')
 
         scaler = joblib.load(scaler_file)
 
