@@ -2,6 +2,7 @@ import json
 from mlpredict.prediction import predict_walltime
 from sklearn.externals import joblib
 import pkg_resources
+import os
 
 
 def new_dnn(input_dimension,input_size):
@@ -20,8 +21,19 @@ def new_dnn(input_dimension,input_size):
     return net
 
 
-def import_model(path):
-    """Import model from path
+def import_default(dnn_name):
+    """Import dnn from default path
+    Returns:
+        net: instance of class dnn"""
+    dnn_path = pkg_resources.resource_filename(
+            'mlpredict', 'dnn_architecture/%s.json'
+            %dnn_name)
+    net = import_dnn(dnn_path)
+    return net
+
+
+def import_dnn(path):
+    """Import dnn from path
     Returns:
         net: instance of class dnn"""
     net = dnn()
@@ -35,8 +47,11 @@ def import_model(path):
 class dnn(dict):
     """Class for deep neural network architecture"""
 
+
     def save(self,path):
-        """Save model to path"""
+        """Save dnn to path"""
+        if not os.path.isdir(os.path.dirname(path)):
+            os.mkdir(os.path.dirname(path))
         with open(path, 'w') as json_file:
             json.dump(self, json_file, indent=4)
 
@@ -132,10 +147,10 @@ class dnn(dict):
 
 
     def predict(self,
-                gpu_def,
+                gpu,
                 optimizer='SGD',
                 batchsize=1,
-                saved_model='',
+                model_file='',
                 scaler_file=''):
         """Predicts execution time of class instance
         Args:
@@ -158,13 +173,16 @@ class dnn(dict):
             scaler_file = pkg_resources.resource_filename(
                     'mlpredict', 'model/scaler_Conv_all.save')
 
+        gpu_file = pkg_resources.resource_filename(
+                'mlpredict', 'GPUs/%s.json' %gpu)
+
         scaler = joblib.load(scaler_file)
 
-        with open(gpu_def) as json_data:
-            gpu = json.load(json_data)
+        with open(gpu_file) as json_data:
+            gpu_stats = json.load(json_data)
 
         layer,time = predict_walltime(
                 self, model_file, scaler, batchsize, optimizer,
-                gpu['bandwidth'], gpu['cores'], gpu['clock'])
+                gpu_stats['bandwidth'], gpu_stats['cores'], gpu_stats['clock'])
 
         return sum(time), layer, time
