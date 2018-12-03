@@ -3,7 +3,7 @@ import os
 import json
 import pkg_resources
 
-import mlpredict.api
+import mlpredict
 
 
 class DnnImportError(Exception):
