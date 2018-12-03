@@ -7,7 +7,7 @@ from mlpredict.prediction import predict_walltime
 from mlpredict.import_tools import import_gpu
 
 
-class dnn(dict):
+class Dnn(dict):
     """Class for deep neural network architecture"""
 
     def __init__(self, input_dimension, input_size):
@@ -17,14 +17,14 @@ class dnn(dict):
         self['input']['size'] = input_size
 
     def save(self, path):
-        """Save dnn to path"""
+        """Save Dnn to path"""
         if not os.path.isdir(os.path.dirname(path)):
             os.mkdir(os.path.dirname(path))
         with open(path, 'w') as json_file:
             json.dump(self, json_file, indent=4)
 
     def describe(self):
-        """Prints a description of of the class instance"""
+        """Prints a description of the class instance"""
         print('%d layer network\n' % (len(self['layers'])))
         print('Input size %dx%dx%d\n'
               % (self['input']['size'], self['input']['size'],
