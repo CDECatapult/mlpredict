@@ -39,13 +39,15 @@ def import_dnn_default(dnn_name):
     """Import dnn from default path
     Returns:
         net: instance of class dnn"""
-    dnn_file = pkg_resources.resource_filename(
-        'mlpredict', 'dnn_architecture/%s.json'
-        % dnn_name)
-    if not os.path.isfile(dnn_path):
-        raise DnnImportError('No local Network definition found. Attempted to '
-            'load %s from mlpredict. File not found. % dnn_name')
-    net = import_dnn_file(dnn_path)
+    try:
+        dnn_file = pkg_resources.resource_filename(
+            'mlpredict', 'dnn_architecture/%s.json'
+            % dnn_name)
+        print(dnn_file)
+    except:
+        raise DnnImportError('No local network definition found. Attempted to '
+            'import %s.json from mlpredict. File not found.' % dnn_name)
+    net = import_dnn_file(dnn_file)
     return net
 
 
@@ -60,9 +62,9 @@ def import_dnn_file(dnn_file):
     try:
         net['layers'] = tmpdict['layers']
         net['input'] = tmpdict['input']
-        return net
     except:
-        raise DnnImportError('Invalid format of %s' % dnn_path)
+        raise DnnImportError('Invalid format of %s' % dnn_file)
+    return net
 
 
 def import_gpu(gpu_obj):
@@ -80,11 +82,12 @@ def import_gpu_default(gpu_name):
     """Import gpu definition from default path
     Returns:
         gpu_stats"""
-    gpu_file = pkg_resources.resource_filename(
-        'mlpredict', 'GPUs/%s.json' % gpu_name)
-    if not os.path.isfile(gpu_file):
+    try:
+        gpu_file = pkg_resources.resource_filename(
+            'mlpredict', 'GPUs/%s.json' % gpu_name)
+    except:
         raise GpuImportError('No local GPU definition found. Attempted to '
-            'load %s from mlpredict. File not found. % gpu_name')
+            'import %s.json from mlpredict. File not found.' % gpu_name)
     gpu_stats = import_gpu_file(gpu_file)
     return gpu_stats
 
