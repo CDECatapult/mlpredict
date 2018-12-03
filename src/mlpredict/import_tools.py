@@ -39,20 +39,23 @@ def import_dnn_default(dnn_name):
     """Import dnn from default path
     Returns:
         net: instance of class dnn"""
-    dnn_path = pkg_resources.resource_filename(
+    dnn_file = pkg_resources.resource_filename(
         'mlpredict', 'dnn_architecture/%s.json'
         % dnn_name)
+    if not os.path.isfile(dnn_path):
+        raise DnnImportError('No local Network definition found. Attempted to '
+            'load %s from mlpredict. File not found. % dnn_name')
     net = import_dnn_file(dnn_path)
     return net
 
 
-def import_dnn_file(dnn_path):
+def import_dnn_file(dnn_file):
     """Import dnn from local path
     Returns:
         net: instance of class dnn"""
 
     net = mlpredict.api.dnn(0, 0)
-    with open(dnn_path) as json_data:
+    with open(dnn_file) as json_data:
         tmpdict = json.load(json_data)
     try:
         net['layers'] = tmpdict['layers']
@@ -79,15 +82,18 @@ def import_gpu_default(gpu_name):
         gpu_stats"""
     gpu_file = pkg_resources.resource_filename(
         'mlpredict', 'GPUs/%s.json' % gpu_name)
+    if not os.path.isfile(gpu_file):
+        raise GpuImportError('No local GPU definition found. Attempted to '
+            'load %s from mlpredict. File not found. % gpu_name')
     gpu_stats = import_gpu_file(gpu_file)
     return gpu_stats
 
 
-def import_gpu_file(gpu_path):
+def import_gpu_file(gpu_file):
     """Import gpu definition from local path
     Returns:
         gpu_stats"""
-    with open(gpu_path) as json_data:
+    with open(gpu_file) as json_data:
         gpu_stats = json.load(json_data)
     if not all(key in gpu_stats.keys() for key in ['bandwidth','cores', 'clock']):
         raise GpuImportError(
