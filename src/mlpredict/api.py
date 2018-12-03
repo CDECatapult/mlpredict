@@ -76,9 +76,8 @@ class Dnn(dict):
                 (kwargs['padding'].lower() == 'valid')
                 * (kwargs['kernelsize'] - 1))
             output_size = (
-                (input_size -
-                 padding_reduction) /
-                kwargs['strides'])
+                (input_size - padding_reduction)
+                / kwargs['strides'])
 
             self['layers'][new_layer]['matsize'] = input_size
             self['layers'][new_layer]['kernelsize'] = kwargs['kernelsize']
@@ -95,9 +94,8 @@ class Dnn(dict):
                 (kwargs['padding'].lower() == 'valid')
                 * (kwargs['pool_size'] - 1))
             output_size = (
-                (input_size -
-                 padding_reduction) /
-                kwargs['strides'])
+                (input_size - padding_reduction)
+                / kwargs['strides'])
 
             self['layers'][new_layer]['pool_size'] = kwargs['pool_size']
             self['layers'][new_layer]['strides'] = kwargs['strides']
