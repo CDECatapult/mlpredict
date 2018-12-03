@@ -7,7 +7,8 @@ import mlpredict.api
 
 
 def import_dnn(dnn_obj):
-    """Import dnn. Tries local definition first
+    """Import dnn definition from local file or mlpredict.
+    Tries local definition first.
     Returns:
         net: instance of class Dnn"""
     try:
@@ -22,7 +23,7 @@ def import_dnn(dnn_obj):
 
 
 def import_dnn_default(dnn_name):
-    """Import dnn from default path
+    """Import dnn from default path (mlpredict).
     Returns:
         net: instance of class Dnn"""
     dnn_path = pkg_resources.resource_filename(
@@ -33,7 +34,7 @@ def import_dnn_default(dnn_name):
 
 
 def import_dnn_file(dnn_path):
-    """Import dnn from local path
+    """Import dnn from local path.
     Returns:
         net: instance of class Dnn"""
     net = mlpredict.api.dnn(0, 0)
@@ -45,7 +46,8 @@ def import_dnn_file(dnn_path):
 
 
 def import_gpu(gpu_obj):
-    """Import gpu definition. Tries local definition first
+    """Import gpu definition from local file or mlpredict.
+    Tries local definition first.
     Returns:
         gpu_stats"""
     try:
@@ -60,7 +62,7 @@ def import_gpu(gpu_obj):
 
 
 def import_gpu_default(gpu_name):
-    """Import gpu definition from default path
+    """Import gpu definition from default path (mlpredict).
     Returns:
         gpu_stats"""
     gpu_file = pkg_resources.resource_filename(
@@ -70,7 +72,7 @@ def import_gpu_default(gpu_name):
 
 
 def import_gpu_file(gpu_path):
-    """Import gpu definition from local path
+    """Import gpu definition from local path.
     Returns:
         gpu_stats"""
     with open(gpu_path) as json_data:
