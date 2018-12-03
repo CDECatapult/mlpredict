@@ -16,7 +16,7 @@ def predict_walltime(model,
     Args:
         model: Deep neural network architecture, instance of the model class
         model_file: tensorflow model
-        sklearn: skleran scaler
+        sklearn: sklearn scaler
         batchsize (int)
         optimizer (string)
         bandwidth: GPU memory bandwidth in GB/s (int)
@@ -62,6 +62,7 @@ def get_input_features(
         bandwidth,
         cores,
         clock):
+    """Generates fetaure dictionary to be used with mlpredict"""
 
     padding_reduction = ((dictionary['padding'].lower() == 'valid')
                          * (dictionary['kernelsize'] - 1))
@@ -86,26 +87,27 @@ def get_input_features(
                   * elements_output
                   * dictionary['channels_out'])
 
-    features = np.array([batchsize,
-                         dictionary['matsize']**2,
-                         dictionary['kernelsize']**2,
-                         dictionary['channels_in'],
-                         dictionary['channels_out'],
-                         (1 if dictionary['padding'].lower() == 'same' else 0),
-                         dictionary['strides'],
-                         dictionary['use_bias'],
-                         (1 if optimizer.lower() == 'sgd' else 0),
-                         (1 if optimizer.lower() == 'adadelta' else 0),
-                         (1 if optimizer.lower() == 'adagrad' else 0),
-                         (1 if optimizer.lower() == 'momentum' else 0),
-                         (1 if optimizer.lower() == 'adam' else 0),
-                         (1 if optimizer.lower() == 'rmsprop' else 0),
-                         (1 if dictionary['activation'].lower() == 'relu' else 0),
-                         (1 if dictionary['activation'].lower() == 'tanh' else 0),
-                         (1 if dictionary['activation'].lower() == 'sigmoid' else 0),
-                         bandwidth,
-                         cores,
-                         clock])
+    features = np.array([
+        batchsize,
+        dictionary['matsize']**2,
+        dictionary['kernelsize']**2,
+        dictionary['channels_in'],
+        dictionary['channels_out'],
+        (1 if dictionary['padding'].lower() == 'same' else 0),
+        dictionary['strides'],
+        dictionary['use_bias'],
+        (1 if optimizer.lower() == 'sgd' else 0),
+        (1 if optimizer.lower() == 'adadelta' else 0),
+        (1 if optimizer.lower() == 'adagrad' else 0),
+        (1 if optimizer.lower() == 'momentum' else 0),
+        (1 if optimizer.lower() == 'adam' else 0),
+        (1 if optimizer.lower() == 'rmsprop' else 0),
+        (1 if dictionary['activation'].lower() == 'relu' else 0),
+        (1 if dictionary['activation'].lower() == 'tanh' else 0),
+        (1 if dictionary['activation'].lower() == 'sigmoid' else 0),
+        bandwidth,
+        cores,
+        clock])
 
     features = scaler.transform(features.reshape(1, -1))
     return features
