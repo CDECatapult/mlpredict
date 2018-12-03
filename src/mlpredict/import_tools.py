@@ -26,8 +26,8 @@ def import_dnn_default(dnn_name):
     Returns:
         net: instance of class dnn"""
     dnn_path = pkg_resources.resource_filename(
-            'mlpredict', 'dnn_architecture/%s.json'
-            %dnn_name)
+        'mlpredict', 'dnn_architecture/%s.json'
+        % dnn_name)
     net = import_dnn_file(dnn_path)
     return net
 
@@ -36,7 +36,7 @@ def import_dnn_file(dnn_path):
     """Import dnn from local path
     Returns:
         net: instance of class dnn"""
-    net = mlpredict.api.dnn(0,0)
+    net = mlpredict.api.dnn(0, 0)
     with open(dnn_path) as json_data:
         tmpdict = json.load(json_data)
     net['layers'] = tmpdict['layers']
@@ -53,7 +53,7 @@ def import_gpu(gpu_obj):
             gpu_stats = import_gpu_file(gpu_obj)
         else:
             gpu_stats = import_gpu_default(gpu_obj)
-    except:
+    except BaseException:
         gpu_stats = {}
         print('GPU definition could not be found')
     return gpu_stats
@@ -64,7 +64,7 @@ def import_gpu_default(gpu_name):
     Returns:
         gpu_stats"""
     gpu_file = pkg_resources.resource_filename(
-            'mlpredict', 'GPUs/%s.json' %gpu_name)
+        'mlpredict', 'GPUs/%s.json' % gpu_name)
     gpu_stats = import_gpu_file(gpu_file)
     return gpu_stats
 
