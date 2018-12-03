@@ -40,7 +40,8 @@ def import_dnn(dnn_obj):
 def import_dnn_default(dnn_name):
     """Import dnn from default path (mlpredict).
     Returns:
-        net: instance of class Dnn"""
+        net: instance of class Dnn
+    """
     try:
         dnn_file = pkg_resources.resource_filename(
             'mlpredict', 'dnn_architecture/%s.json'
@@ -58,7 +59,7 @@ def import_dnn_file(dnn_file):
     Returns:
         net: instance of class Dnn
     """
-    net = mlpredict.api.dnn(0, 0)
+    net = mlpredict.api.Dnn(0, 0)
     with open(dnn_file) as json_data:
         tmpdict = json.load(json_data)
     try:
@@ -97,7 +98,6 @@ def import_gpu_default(gpu_name):
     return gpu_stats
 
 
-<<<<<<< HEAD
 def import_gpu_file(gpu_file):
     """Import gpu definition from local path
     Returns:
