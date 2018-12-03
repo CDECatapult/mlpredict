@@ -9,7 +9,7 @@ import mlpredict.api
 def import_dnn(dnn_obj):
     """Import dnn. Tries local definition first
     Returns:
-        net: instance of class dnn"""
+        net: instance of class Dnn"""
     try:
         if os.path.isfile(dnn_obj):
             net = import_dnn_file(dnn_obj)
@@ -24,7 +24,7 @@ def import_dnn(dnn_obj):
 def import_dnn_default(dnn_name):
     """Import dnn from default path
     Returns:
-        net: instance of class dnn"""
+        net: instance of class Dnn"""
     dnn_path = pkg_resources.resource_filename(
         'mlpredict', 'dnn_architecture/%s.json'
         % dnn_name)
@@ -35,7 +35,7 @@ def import_dnn_default(dnn_name):
 def import_dnn_file(dnn_path):
     """Import dnn from local path
     Returns:
-        net: instance of class dnn"""
+        net: instance of class Dnn"""
     net = mlpredict.api.dnn(0, 0)
     with open(dnn_path) as json_data:
         tmpdict = json.load(json_data)
