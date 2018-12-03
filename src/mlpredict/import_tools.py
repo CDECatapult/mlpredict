@@ -10,14 +10,14 @@ def import_dnn(dnn_obj):
     """Import dnn. Tries local definition first
     Returns:
         net: instance of class dnn"""
-    # try:
+    try:
     if os.path.isfile(dnn_obj):
         net = import_dnn_file(dnn_obj)
     else:
         net = import_dnn_default(dnn_obj)
-    # except:
-    #     net = {}
-    #     print('Deep neural network representation could not be found')
+    except BaseException:
+        net = {}
+        print('Deep neural network representation could not be found')
     return net
 
 
