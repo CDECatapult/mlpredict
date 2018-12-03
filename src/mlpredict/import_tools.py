@@ -25,9 +25,11 @@ class GpuImportError(Exception):
 
 
 def import_dnn(dnn_obj):
-    """Import dnn. Tries local definition first
+    """Import dnn definition from local file or mlpredict.
+    Tries local definition first.
     Returns:
-        net: instance of class dnn"""
+        net: instance of class Dnn
+    """
     if os.path.isfile(dnn_obj):
         net = import_dnn_file(dnn_obj)
     else:
@@ -36,9 +38,9 @@ def import_dnn(dnn_obj):
 
 
 def import_dnn_default(dnn_name):
-    """Import dnn from default path
+    """Import dnn from default path (mlpredict).
     Returns:
-        net: instance of class dnn"""
+        net: instance of class Dnn"""
     try:
         dnn_file = pkg_resources.resource_filename(
             'mlpredict', 'dnn_architecture/%s.json'
@@ -52,10 +54,10 @@ def import_dnn_default(dnn_name):
 
 
 def import_dnn_file(dnn_file):
-    """Import dnn from local path
+    """Import dnn from local path.
     Returns:
-        net: instance of class dnn"""
-
+        net: instance of class Dnn
+    """
     net = mlpredict.api.dnn(0, 0)
     with open(dnn_file) as json_data:
         tmpdict = json.load(json_data)
@@ -68,9 +70,11 @@ def import_dnn_file(dnn_file):
 
 
 def import_gpu(gpu_obj):
-    """Import gpu definition. Tries local definition first
+    """Import gpu definition from local file or mlpredict.
+    Tries local definition first.
     Returns:
-        gpu_stats"""
+        gpu_stats
+    """
     if os.path.isfile(gpu_obj):
         gpu_stats = import_gpu_file(gpu_obj)
     else:
@@ -79,9 +83,10 @@ def import_gpu(gpu_obj):
 
 
 def import_gpu_default(gpu_name):
-    """Import gpu definition from default path
+    """Import gpu definition from default path (mlpredict).
     Returns:
-        gpu_stats"""
+        gpu_stats
+    """
     try:
         gpu_file = pkg_resources.resource_filename(
             'mlpredict', 'GPUs/%s.json' % gpu_name)
@@ -92,10 +97,12 @@ def import_gpu_default(gpu_name):
     return gpu_stats
 
 
+<<<<<<< HEAD
 def import_gpu_file(gpu_file):
     """Import gpu definition from local path
     Returns:
-        gpu_stats"""
+        gpu_stats
+    """
     with open(gpu_file) as json_data:
         gpu_stats = json.load(json_data)
     if not all(key in gpu_stats.keys() for key in ['bandwidth','cores', 'clock']):
