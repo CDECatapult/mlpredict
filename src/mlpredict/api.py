@@ -1,5 +1,5 @@
 import json
-from sklearn.externals import joblib
+import joblib
 import pkg_resources
 import os
 
